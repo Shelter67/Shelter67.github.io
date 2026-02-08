@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>快速Nginx | Shelter</title><meta name="author" content="Shelter"><meta name="copyright" content="Shelter"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1234567891011#启动nginx#检查进程ps -ef | grep nginx#查看端口占用情况lsof -i:80#控制nginx的停止或重启nginx -s signal(signal是下图中的任意一个)  &lt;img src&#x3D;”.&#x2F;images&#x2F;快速nginx&#x2F;image-20251101231003548.png”  静态站点部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速Nginx">
+<meta property="og:url" content="http://localhost:4000/posts/7fc464b8.html">
+<meta property="og:site_name" content="Shelter">
+<meta property="og:description" content="1234567891011#启动nginx#检查进程ps -ef | grep nginx#查看端口占用情况lsof -i:80#控制nginx的停止或重启nginx -s signal(signal是下图中的任意一个)  &lt;img src&#x3D;”.&#x2F;images&#x2F;快速nginx&#x2F;image-20251101231003548.png”  静态站点部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://localhost:4000/img/cover/5.jpg">
+<meta property="article:published_time" content="2025-11-01T19:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-04T11:08:57.700Z">
+<meta property="article:author" content="Shelter">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="服务器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/img/cover/5.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "快速Nginx",
+  "url": "http://localhost:4000/posts/7fc464b8.html",
+  "image": "http://localhost:4000/img/cover/5.jpg",
+  "datePublished": "2025-11-01T19:00:00.000Z",
+  "dateModified": "2026-02-04T11:08:57.700Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Shelter",
+      "url": "https://github.com/Shelter67"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://localhost:4000/posts/7fc464b8.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/manifest.json"/><meta name="msapplication-TileColor" content="#49b1f5"/><link rel="apple-touch-icon" sizes="180x180" href="/img/siteicon/128.png"/><link rel="icon" type="image/png" sizes="32x32" href="/img/siteicon/32/png"/><link rel="icon" type="image/png" sizes="16x16" href="/img/siteicon/16.png"/><link rel="mask-icon" href="/img/siteicon/128.png" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":3,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: true
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-right"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '快速Nginx',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><style>#waifu { left: auto !important; right: 20px !important; }</style><meta name="generator" content="Hexo 8.1.1"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/zhuifan.html"><i class="fa-fw fas fa-tv"></i><span> 追番</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/zhuiju.html"><i class="fa-fw fas fa-video"></i><span> 追剧</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/5.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Shelter</span></a><a class="nav-page-title" href="/"><span class="site-name">快速Nginx</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/zhuifan.html"><i class="fa-fw fas fa-tv"></i><span> 追番</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/zhuiju.html"><i class="fa-fw fas fa-video"></i><span> 追剧</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">快速Nginx</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-01T19:00:00.000Z" title="发表于 2025-11-02 03:00:00">2025-11-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T11:08:57.700Z" title="更新于 2026-02-04 19:08:57">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-02-04 19:08:57&quot;}" hidden></div><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./images/%E5%BF%AB%E9%80%9Fnginx/image-20251101224806945.png" alt="image-20251101224806945"></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./images/%E5%BF%AB%E9%80%9Fnginx/image-20251101224917851.png" alt="image-20251101224917851"></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./images/%E5%BF%AB%E9%80%9Fnginx/image-20251101224941672.png" alt="image-20251101224941672"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#启动</span></span><br><span class="line">nginx</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查进程</span></span><br><span class="line">ps -ef | grep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看端口占用情况</span></span><br><span class="line">lsof -i:80</span><br><span class="line"></span><br><span class="line"><span class="comment">#控制nginx的停止或重启</span></span><br><span class="line">nginx -s signal(signal是下图中的任意一个)</span><br></pre></td></tr></table></figure>
+
+<p>&lt;img src&#x3D;”.&#x2F;images&#x2F;快速nginx&#x2F;image-20251101231003548.png” </p>
+<h1 id="静态站点部署"><a href="#静态站点部署" class="headerlink" title="静态站点部署"></a>静态站点部署</h1><p>输入下面的命令，然后找到nginx.conf，安装方式不同会导致这个配置文件的位置不同</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看Nginx的安装目录 编译参数以及配置文件和日志文件的位置各种信息</span></span><br><span class="line">nginx -V</span><br><span class="line"></span><br><span class="line">使用vscode打开这个配置文件</span><br><span class="line">连接shelter@192.168.23.128</span><br></pre></td></tr></table></figure>
+
+<p>&lt;img src&#x3D;”.&#x2F;images&#x2F;快速nginx&#x2F;image-20251101231500956.png” </p>
+<p>往下翻找到一个server的部分，然后在 server 里面还有一个location，这个location就是匹配我们在浏览器中输入的URL的，比如这里的斜线就表示匹配根目录，也就是当我们只输入一个localhost后面什么都不输入的时候，就会匹配到这个location中的内容，然后就会到它里面指定目录下去找一个index.html这个文件也就是默认页面。</p>
+<p>这里html就是根目录所对应的文件夹，它是一个相对路径，是相对于nginx安装的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">       listen       80;</span><br><span class="line">       server_name  localhost;</span><br><span class="line"></span><br><span class="line">       <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">       <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">       location / &#123;</span><br><span class="line">           root   html;</span><br><span class="line">           try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">           index index.html index.htm;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个框架可以把Markdown格式的文档转换成静态页面</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./images/%E5%BF%AB%E9%80%9Fnginx/image-20251102023012047.png" alt="image-20251102023012047"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nginx</span><br><span class="line">hexo init blog-demo</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">cd</span> blog-demo</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">hexo g#生成静态站点，放到public文件夹</span><br><span class="line">hexo s#启动本地服务器</span><br><span class="line"></span><br><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="built_in">cd</span> public</span><br><span class="line"><span class="built_in">cp</span> -rf * /opt/homebrew/var/www/</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>worker进程的数量就可以通过配置文件来修改，一打开就可以看到下面的这行，后面的数字就是worker进程的数量，默认1改成10，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">worker_processes  10;</span><br><span class="line"><span class="comment">#检查配置文件的内容是否正确，会提示原因</span></span><br><span class="line">nginx -t</span><br><span class="line"><span class="comment">#重新加载</span></span><br><span class="line">nginx -s reload</span><br><span class="line"><span class="comment">#查看nginx进程，这时候应该是10个</span></span><br><span class="line">ps -ef |grep nginx</span><br></pre></td></tr></table></figure>
+
+<p>也可以设置成auto，这样Nginx就会根据内核的数量自动设置worker进程的数量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">worker_processes  auto;</span><br></pre></td></tr></table></figure>
+
+<p>配置文件主要由三个配置块组成，最外面是全局块（全局配置）</p>
+<p>然后是events块，主要是一些服务器和客户端之间网络连接的一些配置</p>
+<p>然后是一个http块，http块里面又可以包含多server块，也叫虚拟主机，在最下面一行可以看到有一个include servers&#x2F;*，表示把servers目录下的所有配置文件都包含进来，这样就可以把每个虚拟主机的配置都放到一个单独的文件里面，让主配置文件看起来更加简洁清晰</p>
+<p>include这个指令还可以包含其他的配置文件，比如include mime.types，把mime.types文件包含进来</p>
+<h1 id="反向代理负载均衡"><a href="#反向代理负载均衡" class="headerlink" title="反向代理负载均衡"></a>反向代理负载均衡</h1><p>简单来说 正向代理就是代理客户端，反向代理就是代理服务端</p>
+<p>跟着视频弄了三个服务端口号，然后修改一下config，添加一个upstream的配置，这个就是反向代理配置，后面的名字可以随便取，括号里是需要被代理的服务器的配置</p>
+<p>配置完再在下面的server里再添加一个location配置，比如所有以app开头的请求都被代理到刚刚的upstream中，proxy_pass的地址需要和刚刚upstream后面的名字保持一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">upstream backend&#123;</span><br><span class="line">	ip_hash;</span><br><span class="line">	server 127.0.0.1:8000 weight=3;</span><br><span class="line">	server 127.0.0.1:8001;</span><br><span class="line">	server 127.0.0.1:8002;</span><br><span class="line">&#125;</span><br><span class="line">server&#123;</span><br><span class="line">	xxx</span><br><span class="line">	location /app&#123;</span><br><span class="line">		proxy_pass http:/backend;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后重载运行，打开网址可以看到一个localhost&#x2F;app切换了三个页面，默认是轮流的方式代理，如果一台电脑比其他两台要好，就可以使用权重weight调整负载均衡策略，权重越大被请求的次数也就越多</p>
+<p>还有个负载均衡策略就是ip_hash，这个策略会根据客户端的iP地址进行一个哈希，同一个客户端的请求就会被分配到同一个服务器上，这样就解决了一些session相关的问题</p>
+<h1 id="HTTPS配置"><a href="#HTTPS配置" class="headerlink" title="HTTPS配置"></a>HTTPS配置</h1><p>HTTPS协议是HTTP协议的安全版本，它通过对传输的数据进行加密来保证数据的安全性</p>
+<p>http默认端口80，而HTTPS协议的默认端口是443，HTTPS协议需要使用到SSL证书，在主流的云平台上都可以免费申请到SSL证书，如果没有云平台也没有关系，我们可以通过 openssl 命令来自己生成一个自签名的证书，使用下面这三行命令就可以了，或者也可以将这三行命分合并成一个命分</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./images/%E5%BF%AB%E9%80%9Fnginx/image-20251102030051052.png" alt="image-20251102030051052"></p>
+<p>输入之后提示我们输入信息比如国家 省份 城市 公司 邮箱等等，这些信息就是待会生成证书文件里面的信息，填写完成之后 就会生成两个文件，一个是私钥文件 private.key，另外一个就是证书文件以pem结尾。这两个文件需要放到服务器上然后在Nginx的配置文件中进行配置</p>
+<p>首先需要在监听后面加上一个ssl，然后下面 server name 后面一般填写自己的网站域名，如果是本地测试的话可以随便填一个，然后下面两行就是我们刚刚生成证书文件和私钥文件的路径，再下面是一些加密协议和算法相关的配置，下面这几行配置一般都是固定的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">	listen 443 ssl;</span><br><span class="line">	server_name localhost;</span><br><span class="line">	<span class="comment">#证书文件名称</span></span><br><span class="line">	ssl certificate /opt/homebrew/etc/nginx/cacert.pem;</span><br><span class="line">	<span class="comment">#证书私钥文件名称</span></span><br><span class="line">	ssl_certificate_key /opt/homebrew/etc/nginx/private.key;</span><br><span class="line">	<span class="comment"># ssl验证配置</span></span><br><span class="line">	ssl session <span class="built_in">timeout</span>  5m;··# 缓存有效期</span><br><span class="line">	<span class="comment">#安全链接可选的加密协议</span></span><br><span class="line">	ssl protocolS TLSV1 TLSV1.1 TLSV1.2 TLSv1.3</span><br><span class="line">	<span class="comment"># 配置加密套件/加密算法，写法遵循 openssl 标准。</span></span><br><span class="line">	SSL CipherS ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">	<span class="comment"># 使用服务器端的首选算法</span></span><br><span class="line">	ssl_prefer_server_ciphers on;</span><br><span class="line">	<span class="comment">#charset koi8-r;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置完重新启动nginx，然后打开浏览器</p>
+<p>还有一点就是我们一般都会配置一个重定向来让HTTP的请求自动跳转到HTTPS，配置方法就是在HTTP的 Server 里面加上下面这一行就可以了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这个是再添加一个server块</span></span><br><span class="line">server&#123;</span><br><span class="line">	listen 80;</span><br><span class="line">	server_name geekhour.net www.geekhour.net;</span><br><span class="line">	<span class="built_in">return</span> 301 https://$server_name<span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="虚拟主机"><a href="#虚拟主机" class="headerlink" title="虚拟主机"></a>虚拟主机</h1><p>Nginx中的虚拟主机就是通过server块来实现的，每个server块就是一个虚拟主机，然后通过 server_name来指定这个虚拟主机的域名，这样当我们访问这个域名的时候就会被这个server块所匹配，然后就会执行这个server块中的配置</p>
+<p>我们也可以把nginx.conf中的server部分的内容复制一份，然后在server目录下新建一个文件粘贴进去就可以了，这里新建一个local.conf的文件然后把上节课的server内容复制进去</p>
+<p>这里老师用vue再新建一个站点，然后新建一个vue.conf。</p>
+<p>server的后面加上一对花括号，然后再来配置一下监听的端口，端口号可以随意配置，然后再来配置一个 server_name，在生产环境这里一般需要配置成你的域名，然后再来添加一个location的配置用来指定这个虚拟主机的根目录，也就是我们刚刚打包好的Vue项目的目录，把root后面的路径改成我们刚刚打包好的dist目录就行了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">	listen 5173;</span><br><span class="line">	server_name localhost;</span><br><span class="line">	Location/&#123;</span><br><span class="line">		root /Users/yiny/vue-demo/dist;</span><br><span class="line">		index index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/Shelter67">Shelter</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://localhost:4000/posts/7fc464b8.html">http://localhost:4000/posts/7fc464b8.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://localhost:4000" target="_blank">Shelter</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a></div><div class="post-share"><div class="social-share" data-image="/img/cover/5.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/ea314a42.html" title="一小时k8s"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/6.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">一小时k8s</div></div><div class="info-2"><div class="info-item-1">kubernetes组件一个节点就是一个物理机或者虚拟机，在这个节点上我们可以运行一个或者多个Pod，Pod是Kubernetes的最小调度单元，一个Pod就是一个或者多个应用容器的组合。它创建了一个容器的运行环境，在这个环境容器可以共享一些资源，假设我们的系统包括一个应用程序和一个数据库，就可以将应用程序和数据库分别放到两个不同的Pod中，一般我们建议一个Pod中只运行一个容器，但是并不是只能运行一个容器，这样可以更好地实现应用程序的解耦和扩展，其实一个Pod中是可以运行多个容器的，但是一般也仅限于这些容器是高度耦合的情况，它们之间为了实现某种功能或者共享资源而不得不放到同一个Pod中，比如大家经常听到的Sidecar也就是边车模式，就是将一个应用容器和一个辅助容器放到同一个Pod中，这个辅助容器就是Sidecar，通常用来实现一些辅助的功能。 现在我们已经将应用程序和数据库分别放到了两个Pod中，应用程序要访问数据库的话就需要知道数据库的IP地址，这个IP地址是在Pod创建的时候自动分配的，它是一个集群内部的IP地址，Pod之间可以通过这个IP地址来进行通信，这样我们的应用程...</div></div></div></a><a class="pagination-related" href="/posts/5fe04742.html" title="快速shell"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/17.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">快速shell</div></div><div class="info-2"><div class="info-item-1">12345678910111213#查看shell环境变量的值（使用的什么）echo $SHELL#查看当前正在执行的脚本的名称echo $0#可以直接输入其他脚本的路径来切换到这个脚本/bin/sh#退出exit  编写shell脚本脚本文件可以是任何扩展名，但是约定为sh Shell脚本文件的第一行一般是一个#!，后面加上bin&#x2F;bash用来表示这个脚本文件使用的是Bash解释器，用其他的解释器也可以替换，比如bin&#x2F;zsh 12345#!/bin/bashecho &quot;Hello Shell&quot;date#显示时间whoami#显示当前用户  编辑完保存一下并执行 12chmod a+x hello.sh#设置权限./hello.sh#执行  Shell脚本也是支持函数的，Shel脚本中的变量默认是全局的，它的作用域是从定义的地方开始一直到脚本结束，如果想要在函数中定义一个局部变量的话就需要在变量的前面加上一个local关键字 1234567891011121314151617181920#!/bin/bash# 函数:检查一个数是否为素数...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Shelter</div><div class="author-info-description">记录自己的成长日志</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Shelter67"><i class="fab fa-github"></i><span>没有什么star的github</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Shelter67" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1830191738@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://space.bilibili.com/8416212" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #fb7299;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的小小博客！都是基于hexo框架使用，魔改了一些地方，表现得有些二次元，有个博客希望能在未来工作简历上成为加分项吧，但是弄起来还真的挺好玩的</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%AB%99%E7%82%B9%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">静态站点部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">3.</span> <span class="toc-text">反向代理负载均衡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPS%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">HTTPS配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA"><span class="toc-number">5.</span> <span class="toc-text">虚拟主机</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/da77c56c.html" title="MVC架构设计模式"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MVC架构设计模式"/></a><div class="content"><a class="title" href="/posts/da77c56c.html" title="MVC架构设计模式">MVC架构设计模式</a><time datetime="2026-11-14T16:24:00.000Z" title="发表于 2026-11-15 00:24:00">2026-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e25feb6e.html" title="黑马程序员SSM"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="黑马程序员SSM"/></a><div class="content"><a class="title" href="/posts/e25feb6e.html" title="黑马程序员SSM">黑马程序员SSM</a><time datetime="2026-02-03T03:14:00.000Z" title="发表于 2026-02-03 11:14:00">2026-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/eedaddf.html" title="博客笔记"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/19.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客笔记"/></a><div class="content"><a class="title" href="/posts/eedaddf.html" title="博客笔记">博客笔记</a><time datetime="2026-02-03T02:50:00.000Z" title="发表于 2026-02-03 10:50:00">2026-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4a17b156.html" title="Hello World"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/posts/4a17b156.html" title="Hello World">Hello World</a><time datetime="2026-01-27T19:22:37.883Z" title="发表于 2026-01-28 03:22:37">2026-01-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/d2dc75e3.html" title="老杜MyBatis"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="老杜MyBatis"/></a><div class="content"><a class="title" href="/posts/d2dc75e3.html" title="老杜MyBatis">老杜MyBatis</a><time datetime="2025-12-09T19:12:00.000Z" title="发表于 2025-12-10 03:12:00">2025-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Shelter</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="/js/tw_cn.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"></div><script src="https://fastly.jsdelivr.net/npm/live2d-widgets@1.0.0/dist/autoload.js"></script><div class="aplayer no-destroy" data-id="435010695" data-server="netease" data-type="playlist" data-order="list" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true" ></div><script id="canvas_nest" defer="defer" color="255,192,203" opacity="0" zIndex="-1" count="80" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><div id="app-refresh" style="position: fixed; top: -2.2rem; left: 0; right: 0; z-index: 99999; padding: 0 1rem; font-size: 15px; height: 2.2rem; transition: all 0.3s ease;"><div class="app-refresh-wrap" style="display: flex; color: #fff; height: 100%; align-items: center; justify-content: center;"><label>🚀 有新内容发布啦！</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color: #fff; text-decoration: underline; cursor: pointer; margin-left: 8px;">点击刷新</span></a></div></div><script>if ('serviceWorker' in navigator) {
+  // 如果当前页面受 Service Worker 控制，监听控制权变化
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      showNotification();
+    });
+  }
+
+  // 页面加载完成后注册 sw.js
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.error('PWA 注册失败:', err);
+    });
+  });
+}
+
+function showNotification() {
+  // 优先使用主题自带的 Snackbar 弹窗
+  if (window.GLOBAL_CONFIG && GLOBAL_CONFIG.Snackbar) {
+    var snackbarBg = document.documentElement.getAttribute('data-theme') === 'light' ?
+      GLOBAL_CONFIG.Snackbar.bgLight :
+      GLOBAL_CONFIG.Snackbar.bgDark;
+    
+    var snackbarPos = GLOBAL_CONFIG.Snackbar.position;
+
+    Snackbar.show({
+      text: '🚀 有新文章发布啦！',
+      backgroundColor: snackbarBg,
+      duration: 10000, // 持续 10 秒
+      pos: snackbarPos,
+      actionText: '点击刷新',
+      actionTextColor: '#fff',
+      onActionClick: function(e) {
+        location.reload();
+      },
+    });
+  } else {
+    // 如果没有 Snackbar，则显示顶部的 app-refresh 栏
+    var showBg = document.documentElement.getAttribute('data-theme') === 'light' ? '#49b1f5' : '#1f1f1f';
+    var appRefresh = document.getElementById('app-refresh');
+    if (appRefresh) {
+      appRefresh.style.cssText = 'top: 0; background: ' + showBg + ';';
+    }
+  }
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索点什么呢………" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
