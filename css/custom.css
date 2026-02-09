@@ -5,13 +5,14 @@
   font-weight: lighter;
 } */
  /* 谷歌字体 */
+  @import url(https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap);
   @font-face {
     font-family: ZhuZiAYuanJWD;
-    src:url(https://cdn.cbd,int/anzhiyu-blog@latest/fonts/ZhuZiAWan.woff2);
+    src: url('https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/fonts/ZhuZiAWan.woff2') format('woff2');
     font-display: swap;
     font-weight: lighter;
   }
-  @import url(https://fonts.googleapis.com/css2?family=ZC00L+KuaiLe&display=swap);
+
 
   /* 这里应该是站点最上面那个字体 */
   div#menus {
@@ -25,7 +26,7 @@
   a.blog-slider__title,
   a.categoryBar-list-link,
   h1.post-title {
-    font-family: ZhuZiAYuanJwD; 
+    font-family: ZhuZiAYuanJWD; 
   }
 
   .iconfont {
@@ -214,7 +215,7 @@
   /* 评论框
   .vwrap {
     box-shadow:2px2px5px #bbb;
-    background:口rgba(255，255，255，0.3);
+    background:口rgba(255,255,255，0.3);
     border-radius: 8px;
     padding: 30px;
     margin:30px 0px 30px px;
@@ -295,7 +296,7 @@
     sans-serif;
   }
     
-  #error-wrap .error-contenr .error-info .error_title {
+  #error-wrap .error-content .error-info .error_title {
     margin-top:-4rem;
     font-size: 9em;
   }
@@ -364,3 +365,38 @@
   #article-container figure.highlight {
     border-radius:10px;
   }
+
+/* 1. 外层容器：设置【不透明】边框 */
+#aside-content .card-clock {
+  background: transparent !important; /* 必须透明，否则会遮挡背景图 */
+  border: 2px solid #ffffff !important; /* 这里是你的不透明边框，颜色可改 */
+  border-radius: 12px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden; /* 确保内部半透明层不超出边框 */
+}
+
+/* 2. 内层背景：保持【半透明】和毛玻璃效果 */
+#aside-content .card-clock .card-background {
+  background-color: rgba(255, 255, 255, 0.4) !important; 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px);
+  margin: 0 !important; /* 填满外层边框内部 */
+  border-radius: 0 !important; /* 边框由外层容器提供，内层无需重复圆角 */
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 3. 夜间模式适配 */
+[data-theme='dark'] #aside-content .card-clock {
+  border: 2px solid #333333 !important; /* 暗色模式下的不透明边框 */
+}
+
+[data-theme='dark'] #aside-content .card-clock .card-background {
+  background-color: rgba(0, 0, 0, 0.3) !important; 
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 4. 字体颜色修正 */
+#aside-content .card-clock .clock-row {
+  color: var(--font-color) !important; 
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
+}
