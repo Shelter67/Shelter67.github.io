@@ -401,3 +401,64 @@
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
 }
 
+/* 只有当页面中存在 #github_container 时（即贡献图页面），才应用以下逻辑 */
+body:has(#github_container) #content-inner.layout {
+    display: flex !important;
+    flex-direction: column !important; 
+}
+
+/* 仅在贡献图页面修复贡献图容器 */
+body:has(#github_container) #content-inner > .recent-post-item {
+    width: 100% !important;
+    background: var(--card-bg) !important;
+    border-radius: 12px;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    box-shadow: var(--card-hover-shadow);
+    flex: none !important;
+}
+
+/* 仅在贡献图页面修复评论区背景和宽度 */
+body:has(#github_container) #page {
+    width: 100% !important;
+    background: var(--card-bg) !important; /* 解决透明问题 */
+    border-radius: 12px;
+    padding: 20px 40px !important;
+    box-shadow: var(--card-hover-shadow);
+    margin: 0 !important;
+    flex: none !important;
+}
+
+/* --- 针对 GitHub 贡献图页面的精准细节修复 --- */
+body:has(#github_container) {
+    
+    /* 1. 修复 Canvas 拉伸：强制等比例缩放 */
+    #gitcanvas {
+        /* 撤销原本固定的 170px 高度，改为自动计算以保持比例 */
+        height: auto !important; 
+        /* 防止在超大屏上过度拉伸导致模糊 */
+        max-width: 100% !important; 
+        display: block !important;
+        margin: 0 auto !important;
+        /* 提升渲染清晰度 */
+        image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* 2. 增加容器的滚动条：防止手机端被挤压变形 */
+    #gitcalendarcanvasbox {
+        width: 100% !important;
+        overflow-x: auto !important; /* 屏幕太窄时允许横滑，不强制挤压 */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 3. 修复底部统计文字（防止文字也跟着变扁） */
+    .contrib-column.table-column {
+        flex: 1 !important;
+        white-space: nowrap !important;
+    }
+
+    /* 4. 优化 Loading 动画位置 */
+    #github_loading {
+        margin: 50px auto !important;
+    }
+}
