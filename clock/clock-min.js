@@ -1,74 +1,136 @@
-// 使用 window 属性避免重复声明，并清理旧定时器
-if (typeof window.DEBUG_MODE === 'undefined') {
-  window.DEBUG_MODE = !1;
-}
-if (window.__clock_interval) {
-  clearInterval(window.__clock_interval);
-  window.__clock_interval = null;
-}
-
+var DEBUG_MODE = !1;
 function debugLog(...e) {
-  window.DEBUG_MODE && console.log(...e);
+  false;
 }
-
 function clockUpdateTime(e, c, a = "Asia/Shanghai") {
   const s = document.getElementById("hexo_electric_clock");
-  if (!s) {
-    console.warn("时钟容器 #hexo_electric_clock 不存在");
-    return;
-  }
-  
+  if (!s) return;
   let n = "#000";
   switch (e.now.icon) {
-    case "100": n = "#fdcc45"; break;
-    case "101": n = "#fe6976"; break;
-    case "102": case "103": n = "#fe7f5b"; break;
-    case "104": case "150": case "151": case "152": case "153": case "154": case "800": case "801": case "802": case "803": case "804": case "805": case "806": case "807": n = "#2152d1"; break;
-    case "300": case "301": case "305": case "306": case "307": case "308": case "309": case "310": case "311": case "312": case "313": case "314": case "315": case "316": case "317": case "318": case "350": case "351": case "399": n = "#49b1f5"; break;
-    case "302": case "303": case "304": n = "#fdcc46"; break;
-    case "400": case "401": case "402": case "403": case "404": case "405": case "406": case "407": case "408": case "409": case "410": case "456": case "457": case "499": n = "#a3c2dc"; break;
-    case "500": case "501": case "502": case "503": case "504": case "507": case "508": case "509": case "510": case "511": case "512": case "513": case "514": case "515": n = "#97acba"; break;
-    case "900": case "999": n = "red"; break;
-    case "901": n = "#179fff";
+    case "100":
+      n = "#fdcc45";
+      break;
+    case "101":
+      n = "#fe6976";
+      break;
+    case "102":
+    case "103":
+      n = "#fe7f5b";
+      break;
+    case "104":
+    case "150":
+    case "151":
+    case "152":
+    case "153":
+    case "154":
+    case "800":
+    case "801":
+    case "802":
+    case "803":
+    case "804":
+    case "805":
+    case "806":
+    case "807":
+      n = "#2152d1";
+      break;
+    case "300":
+    case "301":
+    case "305":
+    case "306":
+    case "307":
+    case "308":
+    case "309":
+    case "310":
+    case "311":
+    case "312":
+    case "313":
+    case "314":
+    case "315":
+    case "316":
+    case "317":
+    case "318":
+    case "350":
+    case "351":
+    case "399":
+      n = "#49b1f5";
+      break;
+    case "302":
+    case "303":
+    case "304":
+      n = "#fdcc46";
+      break;
+    case "400":
+    case "401":
+    case "402":
+    case "403":
+    case "404":
+    case "405":
+    case "406":
+    case "407":
+    case "408":
+    case "409":
+    case "410":
+    case "456":
+    case "457":
+    case "499":
+      n = "#a3c2dc";
+      break;
+    case "500":
+    case "501":
+    case "502":
+    case "503":
+    case "504":
+    case "507":
+    case "508":
+    case "509":
+    case "510":
+    case "511":
+    case "512":
+    case "513":
+    case "514":
+    case "515":
+      n = "#97acba";
+      break;
+    case "900":
+    case "999":
+      n = "red";
+      break;
+    case "901":
+      n = "#179fff";
   }
-  
   s.innerHTML = `\n    <div class="clock-row">\n      <span id="card-clock-clockdate" class="card-clock-clockdate"></span>\n      <span class="card-clock-weather"><i class="qi-${e.now.icon}-fill" style="color: ${n}"></i> ${e.now.text} <span>${e.now.temp}</span> ℃</span>\n      <span class="card-clock-humidity">💧 ${e.now.humidity}%</span>\n    </div>\n    <div class="clock-row">\n      <span id="card-clock-time" class="card-clock-time"></span>\n    </div>\n    <div class="clock-row">\n      <span class="card-clock-windDir"> <i class="qi-gale"></i> ${e.now.windDir}</span>\n      <span class="card-clock-location">${c}</span>\n      <span id="card-clock-dackorlight" class="card-clock-dackorlight"></span>\n    </div>\n  `;
-  
   const t = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   function o(e, c) {
     return ("0".repeat(c) + e).slice(-c);
   }
-  
   function i() {
-    const timeEl = document.getElementById("card-clock-time");
-    const dateEl = document.getElementById("card-clock-clockdate");
-    const ampmEl = document.getElementById("card-clock-dackorlight");
-    
-    if (!timeEl || !dateEl || !ampmEl) {
-      return;
-    }
-    
     const e = new Date(),
       c = { timeZone: a, hour12: !1 },
       s = e.toLocaleString("en-US", c),
       n = new Date(s);
-    
-    timeEl.textContent = o(n.getHours(), 2) + ":" + o(n.getMinutes(), 2) + ":" + o(n.getSeconds(), 2);
-    dateEl.textContent = `${n.getFullYear()}-${o(n.getMonth() + 1, 2)}-${o(n.getDate(), 2)} ${t[n.getDay()]}`;
-    ampmEl.textContent = n.getHours() > 12 ? " P M" : " A M";
+    (document.getElementById("card-clock-time").innerHTML =
+      o(n.getHours(), 2) +
+      ":" +
+      o(n.getMinutes(), 2) +
+      ":" +
+      o(n.getSeconds(), 2)),
+      (document.getElementById(
+        "card-clock-clockdate"
+      ).innerHTML = `${n.getFullYear()}-${o(n.getMonth() + 1, 2)}-${o(
+        n.getDate(),
+        2
+      )} ${t[n.getDay()]}`),
+      (document.getElementById("card-clock-dackorlight").innerHTML =
+        n.getHours() > 12 ? " P M" : " A M");
   }
-  
-  if (window.__clock_interval) {
-    clearInterval(window.__clock_interval);
-  }
-  window.__clock_interval = setInterval(i, 1e3);
-  i();
+  setInterval(i, 1e3), i();
 }
-
 function getIpAndWeather(e = "") {
   const c = (e) => {
     debugLog("🔍 使用城市:", e);
-    const c = `${qweather_api_host}/geo/v2/city/lookup?location=${encodeURIComponent(e)}&key=${qweather_key}`;
+    const c = `${qweather_api_host}/geo/v2/city/lookup?location=${encodeURIComponent(
+      e
+    )}&key=${qweather_key}`;
     fetch(c)
       .then((e) => e.json())
       .then((c) => {
@@ -81,27 +143,19 @@ function getIpAndWeather(e = "") {
         return fetch(t)
           .then((e) => e.json())
           .then((c) => {
-            debugLog("🔍 天气数据:", c);
-            clockUpdateTime(c, e, n);
+            debugLog("🔍 天气数据:", c), clockUpdateTime(c, e, n);
           });
       })
       .catch((e) => console.error("❌ 获取城市或天气错误:", e));
   };
-  
-  if (e && "" !== e.trim()) {
-    c(e);
-  } else {
-    fetch("https://restapi.amap.com/v3/ip?key=" + gaud_map_key)
-      .then((e) => e.json())
-      .then((e) => {
-        const a = e.city || e.province || "未知城市";
-        c(a);
-      })
-      .catch((e) => console.error("❌ 高德IP接口错误:", e));
-  }
+  e && "" !== e.trim()
+    ? c(e)
+    : fetch("https://restapi.amap.com/v3/ip?key="+gaud_map_key)
+        .then((e) => e.json())
+        .then((e) => {
+          const a = e.city || e.province || "未知城市";
+          c(a);
+        })
+        .catch((e) => console.error("❌ 高德IP接口错误:", e));
 }
-
-// 只在容器存在时初始化
-if (document.getElementById("hexo_electric_clock")) {
-  getIpAndWeather(default_city);
-}
+getIpAndWeather(default_city);
